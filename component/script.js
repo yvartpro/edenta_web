@@ -284,21 +284,21 @@ export const renderArticle = async (selector, slug) => {
                 </header>
 
                 ${(article.heroImage || article.heroImageId) ? `
-                    <figure class="mb-14 -mx-6 md:-mx-24 lg:-mx-32">
-                        <img src="${resolveFileUrl(article.heroImage || article.heroImageId)}" alt="${article.title}" class="w-full h-auto shadow-sm">
-                        ${article.title ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${article.title}</figcaption>` : ''}
+                    <figure class="mb-14">
+                        <img src="${resolveFileUrl(article.heroImage || article.heroImageId)}" alt="${article.title}" class="w-full h-auto">
+                        ${article.title ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic">${article.title}</figcaption>` : ''}
                     </figure>
                 ` : `
                     <div class="mb-14 h-1 w-20 bg-pink-100 rounded-full"></div>
                 `}
 
-                <div class="prose prose-pink max-w-none text-[1.2rem] md:text-[1.3rem] leading-[1.6] text-[#292929]">
+                <div class="prose prose-pink max-w-none">
                     ${article.content?.sections?.map(section => `
-                        <div class="mb-12">
-                            ${section.title ? `<h2 class="text-3xl font-bold text-slate-900 mt-14 mb-6 leading-tight">${section.title}</h2>` : ''}
+                        <div>
+                            ${section.title ? `<h2>${section.title}</h2>` : ''}
                             ${section.blocks?.map(block => {
       if (block.type === 'text') {
-        return `<div class="mb-8 font-serif">${block.value}</div>`;
+        return `<div>${block.value}</div>`;
       } else if (block.type === 'image') {
         // Find URL in contentFiles if block.fileId is present, or use block.value if it's a URL
         let imageUrl = block.value;
@@ -309,16 +309,13 @@ export const renderArticle = async (selector, slug) => {
         if (!imageUrl && block.fileId) imageUrl = resolveFileUrl(block.fileId);
 
         return `
-                                        <figure class="my-14 -mx-6 md:-mx-12 group">
-                                            <img src="${imageUrl}" alt="${block.caption || ''}" class="w-full h-auto">
-                                            ${block.caption ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${block.caption}</figcaption>` : ''}
+                                        <figure>
+                                            <img src="${imageUrl}" alt="${block.caption || ''}">
+                                            ${block.caption ? `<figcaption>${block.caption}</figcaption>` : ''}
                                         </figure>
                                     `;
       } else if (block.type === 'list') {
-        return `<div class="mb-6 flex gap-3 font-serif">
-                    <span class="text-pink-500 font-bold">•</span>
-                    <span>${block.value}</span>
-                </div>`;
+        return `<div>${block.value}</div>`;
       }
       return '';
     }).join('')}
