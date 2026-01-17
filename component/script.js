@@ -329,6 +329,7 @@ export const renderArticle = async (selector, slug) => {
         `;
 
     container.innerHTML = html;
+    renderSidebar("#sidebar-content", article);
 
     // Initialize Reading Progress
     window.addEventListener('scroll', () => {
@@ -348,4 +349,88 @@ export const renderArticle = async (selector, slug) => {
             </div>
         `;
   }
+};
+
+/**
+ * Renders the article sidebar with author bio, related posts, and sharing
+ */
+export const renderSidebar = async (selector, currentArticle) => {
+  const container = document.querySelector(selector);
+  if (!container) return;
+
+  // 1. Author Bio Section
+  const authorHtml = `
+        <div class="bg-white rounded-3xl border border-pink-100 p-8 mb-10 shadow-sm">
+            <div class="w-16 h-16 rounded-2xl bg-pink-600 flex items-center justify-center text-white font-black text-2xl mb-6 shadow-lg rotate-3">
+                A
+            </div>
+            <h4 class="text-lg font-black text-slate-900 mb-2 tracking-tight">Auguste Edenta</h4>
+            <div class="text-[9px] font-black uppercase tracking-widest text-pink-600 mb-4">Content Strategist</div>
+            <p class="text-[13px] text-slate-500 leading-relaxed font-medium mb-6">
+                Helping brands and creators master the intersection of creative storytelling and technical SEO.
+            </p>
+            <div class="flex gap-4">
+                <a href="/contact/" class="text-[9px] font-black uppercase tracking-widest text-slate-900 border-b-2 border-pink-100 hover:border-pink-600 transition-all">Let's Talk</a>
+            </div>
+        </div>
+    `;
+
+  // 2. Share Section
+  const shareUrl = encodeURIComponent(window.location.href);
+  const shareTitle = encodeURIComponent(currentArticle.title);
+  const shareHtml = `
+        <div class="mb-10 px-4">
+            <h5 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-6">Share this story</h5>
+            <div class="flex gap-3">
+                <a href="https://twitter.com/intent/tweet?text=${shareTitle}&url=${shareUrl}" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                </a>
+                <a href="https://www.linkedin.com/sharing/share-offsite/?url=${shareUrl}" target="_blank" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+                <button onclick="navigator.clipboard.writeText(window.location.href)" class="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 hover:bg-pink-600 hover:text-white transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"/></svg>
+                </button>
+            </div>
+        </div>
+    `;
+
+  // 3. Related Posts
+  let relatedHtml = "";
+  try {
+    const categoryId = currentArticle.categoryId || "";
+    const url = `${API_BASE_URL}/article?status=published&limit=5&categoryId=${categoryId}`;
+    const resp = await fetch(url);
+    const json = await resp.json();
+    const articles = (json.data || json).filter(a => a.id !== currentArticle.id).slice(0, 3);
+
+    if (articles.length > 0) {
+      relatedHtml = `
+                <div class="mt-12">
+                    <h5 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 ml-4">Recommended</h5>
+                    <div class="space-y-8">
+                        ${articles.map(article => {
+        const postUrl = `/blog/post?slug=${article.slug}`;
+        return `
+                                <a href="${postUrl}" class="group block px-4 transition-all hover:translate-x-1">
+                                    <h6 class="text-[13px] font-black text-slate-900 group-hover:text-pink-600 transition-colors leading-tight mb-2 line-clamp-2">${article.title}</h6>
+                                    <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${formatDate(article.createdAt)}</div>
+                                </a>
+                            `;
+      }).join("")}
+                    </div>
+                </div>
+            `;
+    }
+  } catch (e) {
+    console.warn("Could not load related articles", e);
+  }
+
+  container.innerHTML = `
+        <div class="flex flex-col">
+            ${authorHtml}
+            ${shareHtml}
+            ${relatedHtml}
+        </div>
+    `;
 };
