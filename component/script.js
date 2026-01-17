@@ -115,12 +115,12 @@ export const setSEO = (data) => {
   updateMeta("description", description);
   updateMeta("og:title", data.title, true);
   updateMeta("og:description", description, true);
-  updateMeta("og:image", resolveFileUrl(data.heroImageId), true);
+  updateMeta("og:image", resolveFileUrl(data.heroImage || data.heroImageId), true);
   updateMeta("og:type", "article", true);
   updateMeta("twitter:card", "summary_large_image");
   updateMeta("twitter:title", data.title);
   updateMeta("twitter:description", description);
-  updateMeta("twitter:image", resolveFileUrl(data.heroImageId));
+  updateMeta("twitter:image", resolveFileUrl(data.heroImage || data.heroImageId));
 
   // Canonical Link
   let canonical = document.querySelector('link[rel="canonical"]');
@@ -142,7 +142,7 @@ export const setSEO = (data) => {
     "@type": "BlogPosting",
     "headline": data.title,
     "description": description,
-    "image": resolveFileUrl(data.heroImageId),
+    "image": resolveFileUrl(data.heroImage || data.heroImageId),
     "datePublished": data.createdAt,
     "author": {
       "@type": "Person",
@@ -189,7 +189,7 @@ export const loadArticles = async (selector, limit = 6) => {
             <article class="flex flex-col border-b border-slate-100 pb-10 group hover:border-pink-200 transition-colors">
                 <div class="grid md:grid-cols-[280px_1fr] gap-8 items-start">
                     <div class="relative aspect-[16/10] overflow-hidden rounded-xl bg-slate-100">
-                        <img src="${resolveFileUrl(article.heroImageId) || 'https://via.placeholder.com/800x600?text=No+Image'}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        <img src="${resolveFileUrl(article.heroImage || article.heroImageId) || 'https://via.placeholder.com/800x600?text=No+Image'}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     </div>
                     <div class="flex flex-col h-full py-1">
                         <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-pink-600 mb-4">
@@ -261,9 +261,9 @@ export const renderArticle = async (selector, slug) => {
                     </div>
                 </header>
 
-                ${article.heroImageId ? `
+                ${(article.heroImage || article.heroImageId) ? `
                     <figure class="mb-14 -mx-6 md:-mx-24 lg:-mx-32">
-                        <img src="${resolveFileUrl(article.heroImageId)}" alt="${article.title}" class="w-full h-auto shadow-sm">
+                        <img src="${resolveFileUrl(article.heroImage || article.heroImageId)}" alt="${article.title}" class="w-full h-auto shadow-sm">
                         ${article.title ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${article.title}</figcaption>` : ''}
                     </figure>
                 ` : ''}
@@ -276,9 +276,17 @@ export const renderArticle = async (selector, slug) => {
       if (block.type === 'text') {
         return `<div class="mb-8 font-serif">${block.content}</div>`;
       } else if (block.type === 'image') {
+        // Find URL in contentFiles if block.fileId is present, or use block.value if it's a URL
+        let imageUrl = block.value;
+        if (block.fileId && article.contentFiles) {
+          const file = article.contentFiles.find(f => f.id == block.fileId);
+          if (file) imageUrl = file.url;
+        }
+        if (!imageUrl && block.fileId) imageUrl = resolveFileUrl(block.fileId);
+
         return `
                                         <figure class="my-14 -mx-6 md:-mx-12 group">
-                                            <img src="${resolveFileUrl(block.fileId)}" alt="${block.caption || ''}" class="w-full h-auto">
+                                            <img src="${imageUrl}" alt="${block.caption || ''}" class="w-full h-auto">
                                             ${block.caption ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${block.caption}</figcaption>` : ''}
                                         </figure>
                                     `;
