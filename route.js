@@ -1,11 +1,11 @@
-import { loadComponent, initMobileMenu, loadArticles } from '/component/script.js';
-import { resolveFileUrl, API_BASE_URL } from '/utils.js';
+import { loadComponent, initMobileMenu, loadArticles } from '/edenta_web/component/script.js';
+import { resolveFileUrl, API_BASE_URL } from '/edenta_web/utils.js';
 
 const init = async () => {
     // Load components
     await Promise.all([
-        loadComponent("#header", "/component/header.html"),
-        loadComponent("#footer", "/component/footer.html"),
+        loadComponent("#header", "/edenta_web/component/header.html"),
+        loadComponent("#footer", "/edenta_web/component/footer.html"),
     ]);
 
     // Fetch hero image dynamic from API if needed, or use a default

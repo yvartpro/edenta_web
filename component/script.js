@@ -188,7 +188,7 @@ export const loadArticles = async (selector, limit = 6) => {
 
     container.innerHTML = articles.map(article => {
       const slug = article.slug || '';
-      const postUrl = `/blog/post?slug=${slug}`;
+      const postUrl = `/edenta_web/blog/post?slug=${slug}`;
 
       return `
             <article class="flex flex-col border-b border-slate-100 pb-10 group hover:border-pink-200 transition-colors">
@@ -308,11 +308,11 @@ export const renderArticle = async (selector, slug) => {
         if (!imageUrl && block.fileId) imageUrl = resolveFileUrl(block.fileId);
 
         return `
-                                        <figure>
-                                            <img src="${imageUrl}" alt="${block.caption || ''}">
-                                            ${block.caption ? `<figcaption>${block.caption}</figcaption>` : ''}
-                                        </figure>
-                                    `;
+            <figure>
+                <img src="${imageUrl}" alt="${block.caption || ''}">
+                ${block.caption ? `<figcaption>${block.caption}</figcaption>` : ''}
+            </figure>
+        `;
       } else if (block.type === 'list') {
         return `<div>${block.value}</div>`;
       } else if (block.type === 'gallery') {

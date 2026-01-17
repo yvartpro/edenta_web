@@ -67,25 +67,20 @@
 <footer id="footer"></footer>
 
 <script type="module">
-  import { loadComponent, initMobileMenu, renderArticle } from '/component/script.js';
+  import { loadComponent, initMobileMenu, renderArticle } from '/edenta_web/component/script.js';
   const init = async () => {
     await Promise.all([
-      loadComponent("#header", "/component/header.html"),
-      loadComponent("#footer", "/component/footer.html"),
+      loadComponent("#header", "/edenta_web/component/header.html"),
+      loadComponent("#footer", "/edenta_web/component/footer.html"),
     ]);
 
     const urlParams = new URLSearchParams(window.location.search);
     const slug = urlParams.get('slug');
 
-    console.log("[post.html] window.location.search:", window.location.search);
-    console.log("[post.html] URLSearchParams 'slug':", slug);
-
     if (slug) {
-      console.log(`[post.html] Detected slug: "${slug}". Initializing renderArticle...`);
       await renderArticle("#article-content", slug);
     } else {
-      console.warn("[post.html] No slug found in URL. Redirecting to /blog/...");
-      window.location.href = '/blog/';
+      window.location.href = '/edenta_web/blog/';
     }
 
     initMobileMenu();

@@ -116,11 +116,11 @@
   <footer id="footer"></footer>
 
   <script type="module">
-    import { loadComponent, initMobileMenu } from '/component/script.js';
+    import { loadComponent, initMobileMenu } from '/edenta_web/component/script.js';
     const init = async () => {
       await Promise.all([
-        loadComponent("#header", "/component/header.html"),
-        loadComponent("#footer", "/component/footer.html"),
+        loadComponent("#header", "/edenta_web/component/header.html"),
+        loadComponent("#footer", "/edenta_web/component/footer.html"),
       ]);
       initMobileMenu();
     };
