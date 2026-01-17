@@ -396,9 +396,9 @@ export const renderSidebar = async (selector, currentArticle) => {
                 A
             </div>
             <h4 class="text-lg font-black text-slate-900 mb-2 tracking-tight">Auguste Edenta</h4>
-            <div class="text-[9px] font-black uppercase tracking-widest text-pink-600 mb-4">Content Strategist</div>
+            <div class="text-[9px] font-black uppercase tracking-widest text-pink-600 mb-4">Virtual Assistant & Content Strategist</div>
             <p class="text-[13px] text-slate-500 leading-relaxed font-medium mb-6">
-                Helping brands and creators master the intersection of creative storytelling and technical SEO.
+                Helping individuals and businesses save time, stay organised, and achieve more through expert administrative support and content strategy.
             </p>
             <div class="flex gap-4">
                 <a href="/contact/" class="text-[9px] font-black uppercase tracking-widest text-slate-900 border-b-2 border-pink-100 hover:border-pink-600 transition-all">Let's Talk</a>
