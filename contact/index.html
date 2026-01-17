@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../">
+  <title>Contact | Auguste Edenta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #db2777;
+      --secondary: #9d174d;
+      --accent: #fdf2f8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <header id="header" class="sticky top-0 z-50"></header>
+
+  <main class="py-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h1 class="text-5xl font-black text-slate-900 mb-4">Let's Connect</h1>
+        <p class="text-slate-500 text-lg">Have a project in mind? I'd love to hear from you.</p>
+      </div>
+
+      <div class="bg-white p-12 rounded-[3rem] shadow-2xl border border-pink-50">
+        <form class="space-y-6">
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Name</label>
+              <input type="text"
+                class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-pink-500 outline-none">
+            </div>
+            <div>
+              <label class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Email</label>
+              <input type="email"
+                class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-pink-500 outline-none">
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Subject</label>
+            <input type="text"
+              class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-pink-500 outline-none">
+          </div>
+          <div>
+            <label class="block text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Message</label>
+            <textarea rows="6"
+              class="w-full bg-slate-50 border-none rounded-2xl px-6 py-4 focus:ring-2 focus:ring-pink-500 outline-none"></textarea>
+          </div>
+          <button type="submit"
+            class="w-full py-5 bg-pink-600 text-white font-black rounded-2xl shadow-lg shadow-pink-200 uppercase tracking-widest hover:bg-pink-700 transition-all">Send
+            Message</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script type="module">
+    import { loadComponent, initMobileMenu } from './component/script.js';
+    const init = async () => {
+      await Promise.all([
+        loadComponent("#header", "./header.html"),
+        loadComponent("#footer", "./footer.html"),
+      ]);
+      initMobileMenu();
+    };
+    init();
+  </script>
+</body>
+
+</html>

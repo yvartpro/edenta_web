@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../">
+  <title>About Me | Auguste Edenta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #db2777;
+      --secondary: #9d174d;
+      --accent: #fdf2f8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <header id="header" class="sticky top-0 z-50"></header>
+
+  <main class="py-24">
+    <div class="max-w-4xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h1 class="text-5xl font-black text-slate-900 mb-4">About Me</h1>
+        <div class="h-1.5 w-20 bg-pink-600 mx-auto rounded-full"></div>
+      </div>
+
+      <div class="prose prose-pink prose-xl mx-auto text-slate-600 leading-relaxed">
+        <p class="mb-8">
+          Hi, I'm <strong>Auguste</strong>, a professional content creator and strategist dedicated to helping
+          individuals and businesses build a powerful online presence.
+        </p>
+        <p class="mb-8">
+          With years of experience in <strong>Content Writing</strong>, <strong>SEO</strong>, and
+          <strong>Copywriting</strong>, I believe that every word counts. My mission is to bridge the gap between
+          complex ideas and engaging, readable content that drives results.
+        </p>
+
+        <h2 class="text-3xl font-bold text-slate-900 mt-12 mb-6">My Mission</h2>
+        <p class="mb-8">
+          I want to empower creators and freelancers by sharing the exact methods I use to succeed in the digital
+          landscape. From mastering the basics of content writing to navigating the world of freelancing, I'm here to
+          provide actionable resources and insights.
+        </p>
+
+        <div class="bg-pink-50 p-8 rounded-3xl border border-pink-100 my-12">
+          <h3 class="text-2xl font-bold text-pink-700 mb-4">Why I Do This</h3>
+          <p class="text-pink-900/70 text-lg">
+            The digital world is noisy. I help you cut through the noise with clarity, precision, and a bit of pink
+            energy.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script type="module">
+    import { loadComponent, initMobileMenu } from './component/script.js';
+    const init = async () => {
+      await Promise.all([
+        loadComponent("#header", "./header.html"),
+        loadComponent("#footer", "./footer.html"),
+      ]);
+      initMobileMenu();
+    };
+    init();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../">
+  <title>Resources | Auguste Edenta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #db2777;
+      --secondary: #9d174d;
+      --accent: #fdf2f8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <header id="header" class="sticky top-0 z-50"></header>
+
+  <main class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <h1 class="text-5xl font-black text-slate-900 mb-4">Resources</h1>
+        <p class="text-slate-500 text-lg">Tools and templates to help you master content creation.</p>
+      </div>
+
+      <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-pink-50 hover:shadow-xl transition-all">
+          <span class="text-pink-600 font-bold text-xs uppercase tracking-widest mb-4 block">Writing</span>
+          <h3 class="text-2xl font-bold text-slate-900 mb-4">SEO Checklist</h3>
+          <p class="text-slate-500 mb-6 text-sm">A comprehensive checklist for optimizing every post you write.</p>
+          <a href="#" class="text-pink-600 font-bold hover:underline">Download Template →</a>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-pink-50 hover:shadow-xl transition-all">
+          <span class="text-pink-600 font-bold text-xs uppercase tracking-widest mb-4 block">Freelancing</span>
+          <h3 class="text-2xl font-bold text-slate-900 mb-4">Client Onboarding</h3>
+          <p class="text-slate-500 mb-6 text-sm">Questionnaires and email templates for a professional start.</p>
+          <a href="#" class="text-pink-600 font-bold hover:underline">Get Resources →</a>
+        </div>
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-pink-50 hover:shadow-xl transition-all">
+          <span class="text-pink-600 font-bold text-xs uppercase tracking-widest mb-4 block">Content Strategy</span>
+          <h3 class="text-2xl font-bold text-slate-900 mb-4">Content Calendar</h3>
+          <p class="text-slate-500 mb-6 text-sm">Stay organized with this adaptable content planning tool.</p>
+          <a href="#" class="text-pink-600 font-bold hover:underline">View Calendar →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script type="module">
+    import { loadComponent, initMobileMenu } from './component/script.js';
+    const init = async () => {
+      await Promise.all([
+        loadComponent("#header", "./header.html"),
+        loadComponent("#footer", "./footer.html"),
+      ]);
+      initMobileMenu();
+    };
+    init();
+  </script>
+</body>
+
+</html>

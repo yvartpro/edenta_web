@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="../">
+  <title>Blog | Auguste Edenta</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --primary: #db2777;
+      --secondary: #9d174d;
+      --accent: #fdf2f8;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased">
+  <header id="header" class="sticky top-0 z-50"></header>
+
+  <main class="py-24">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div>
+          <h1 class="text-5xl font-black text-slate-900 mb-4">The Blog</h1>
+          <p class="text-slate-500 text-lg max-w-xl">Deep dives into content strategy, SEO, and the freelance life.</p>
+        </div>
+        <div id="category-filter" class="flex flex-wrap gap-2">
+          <!-- Dynamic categories if needed -->
+        </div>
+      </div>
+
+      <div id="posts" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <!-- Dynamic posts loaded here -->
+      </div>
+
+      <div id="pagination" class="mt-16 flex justify-center gap-4">
+        <!-- Pagination UI -->
+      </div>
+    </div>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script type="module">
+    import { loadComponent, initMobileMenu, loadArticles } from './component/script.js';
+    const init = async () => {
+      await Promise.all([
+        loadComponent("#header", "./header.html"),
+        loadComponent("#footer", "./footer.html"),
+      ]);
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const category = urlParams.get('category');
+
+      // Update title if category is present
+      if (category) {
+        document.title = `${category.replace('-', ' ').toUpperCase()} | Auguste Edenta`;
+      }
+
+      await loadArticles("#posts", 12);
+      initMobileMenu();
+    };
+    init();
+  </script>
+</body>
+
+</html>

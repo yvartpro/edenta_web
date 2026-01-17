@@ -1,0 +1,132 @@
+<header class="bg-white/90 backdrop-blur-lg border-b border-pink-100 shadow-sm transition-all duration-300">
+  <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+    <!-- Logo -->
+    <a href="./" class="flex items-center space-x-3 group">
+      <div
+        class="w-12 h-12 rounded-xl flex items-center justify-center transition-transform group-hover:rotate-12 group-hover:scale-110 shadow-lg shadow-pink-200 bg-pink-600">
+        <span class="text-white font-black text-xl">A</span>
+      </div>
+      <div class="flex flex-col">
+        <span class="text-xl font-black text-slate-900 leading-none">Auguste</span>
+        <span class="text-[10px] font-bold text-pink-600 uppercase tracking-widest">Content Creator</span>
+      </div>
+    </a>
+
+    <!-- Navigation -->
+    <nav class="hidden lg:flex items-center space-x-8">
+      <a href="./" class="text-sm font-bold text-pink-700">Home</a>
+      <a href="about/" class="text-sm font-bold text-slate-500 hover:text-pink-700 transition-colors">About</a>
+
+      <!-- Blog Dropdown -->
+      <div class="relative group/blog">
+        <button
+          class="flex items-center space-x-1 text-sm font-bold text-slate-500 hover:text-pink-700 transition-colors">
+          <span>Blog</span>
+          <svg class="w-4 h-4 transition-transform group-hover/blog:rotate-180" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+
+        <!-- Dropdown Menu -->
+        <div
+          class="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-64 opacity-0 invisible group-hover/blog:opacity-100 group-hover/blog:visible transition-all duration-300 z-50">
+          <div class="bg-white rounded-2xl shadow-2xl border border-pink-100 p-4 mt-2">
+            <div class="space-y-2">
+              <a href="blog/?category=content-writing"
+                class="block p-3 rounded-xl hover:bg-pink-50 text-slate-700 font-bold text-xs transition-colors">📌
+                Content Writing Basics</a>
+              <a href="blog/?category=seo-writing"
+                class="block p-3 rounded-xl hover:bg-pink-50 text-slate-700 font-bold text-xs transition-colors">📌 SEO
+                Writing</a>
+              <a href="blog/?category=copywriting"
+                class="block p-3 rounded-xl hover:bg-pink-50 text-slate-700 font-bold text-xs transition-colors">📌
+                Copywriting</a>
+              <a href="blog/?category=freelancing"
+                class="block p-3 rounded-xl hover:bg-pink-50 text-slate-700 font-bold text-xs transition-colors">📌
+                Freelancing</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <a href="resources/" class="text-sm font-bold text-slate-500 hover:text-pink-700 transition-colors">Resources</a>
+      <a href="services/" class="text-sm font-bold text-slate-500 hover:text-pink-700 transition-colors">Services</a>
+      <a href="contact/"
+        class="px-6 py-3 bg-pink-600 text-white text-xs font-extrabold uppercase tracking-widest rounded-xl hover:bg-pink-700 transition-all shadow-md hover:shadow-xl active:scale-95">
+        Contact Me
+      </a>
+    </nav>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="lg:hidden p-2 text-slate-500 hover:bg-pink-50 rounded-xl transition-colors">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Off-Canvas Mobile Menu -->
+  <div id="mobile-menu-overlay"
+    class="fixed inset-0 bg-slate-950/40 backdrop-blur-sm z-[60] hidden opacity-0 transition-opacity duration-300 overscroll-none">
+  </div>
+
+  <div id="mobile-menu"
+    class="hidden fixed top-0 right-0 bottom-0 w-[300px] bg-white z-[70] shadow-2xl transition-transform duration-500 translate-x-full flex flex-col">
+    <div class="p-6 flex justify-end border-b border-pink-50">
+      <button id="mobile-menu-close"
+        class="p-2 text-slate-400 hover:text-pink-600 hover:bg-pink-50 rounded-xl transition-all">
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+    <div class="bg-white flex-grow overflow-y-auto">
+      <nav class="p-8 space-y-6">
+        <a href="./" class="block text-xl font-bold text-pink-700 tracking-tight">Home</a>
+        <a href="about/"
+          class="block text-xl font-bold text-slate-900 hover:text-pink-700 tracking-tight transition-colors">About</a>
+        <div class="space-y-4">
+          <span class="block text-xs font-black uppercase tracking-widest text-slate-400">Blog</span>
+          <div class="pl-4 space-y-3">
+            <a href="blog/?category=content-writing"
+              class="block text-sm font-bold text-slate-600 hover:text-pink-600">📌 Content Writing</a>
+            <a href="blog/?category=seo-writing" class="block text-sm font-bold text-slate-600 hover:text-pink-600">📌
+              SEO Writing</a>
+            <a href="blog/?category=copywriting" class="block text-sm font-bold text-slate-600 hover:text-pink-600">📌
+              Copywriting</a>
+            <a href="blog/?category=freelancing" class="block text-sm font-bold text-slate-600 hover:text-pink-600">📌
+              Freelancing</a>
+          </div>
+        </div>
+        <a href="resources/"
+          class="block text-xl font-bold text-slate-900 hover:text-pink-700 tracking-tight transition-colors">Resources</a>
+        <a href="services/"
+          class="block text-xl font-bold text-slate-900 hover:text-pink-700 tracking-tight transition-colors">Services</a>
+      </nav>
+
+      <div class="p-8 border-t border-pink-50">
+        <a href="contact/"
+          class="flex items-center justify-center w-full py-4 bg-pink-600 text-white font-black rounded-2xl shadow-lg shadow-pink-200 uppercase tracking-widest text-sm hover:bg-pink-700 transition-all">
+          Contact Me
+        </a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  window.__edenta_initHeader = function () {
+    try {
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const mobileMenu = document.getElementById('mobile-menu');
+      if (overlay && mobileMenu) {
+        if (overlay.parentElement !== document.body) document.body.appendChild(overlay);
+        if (mobileMenu.parentElement !== document.body) document.body.appendChild(mobileMenu);
+      }
+    } catch (e) {
+      console.error('moveMobileToBody error', e);
+    }
+  };
+  try { window.__edenta_initHeader(); } catch (e) { }
+</script>
