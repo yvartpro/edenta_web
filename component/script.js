@@ -291,7 +291,7 @@ export const renderArticle = async (selector, slug) => {
                     <div class="mb-14 h-1 w-20 bg-pink-100 rounded-full"></div>
                 `}
 
-                <div class="prose prose-pink max-w-none">
+                <div class="prose prose-pink max-w-none break-words overflow-hidden">
                     ${article.content?.sections?.map(section => `
                         <div>
                             ${section.title ? `<h2>${section.title}</h2>` : ''}
