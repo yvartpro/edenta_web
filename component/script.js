@@ -1,4 +1,4 @@
-import { formatDate, resolveFileUrl, API_BASE_URL, parseContent } from "/utils.js";
+import { formatDate, resolveFileUrl, API_BASE_URL, parseContent } from "/edenta_web/utils.js";
 
 /**
  * Calculates estimated reading time
@@ -353,11 +353,11 @@ export const renderArticle = async (selector, slug) => {
       }
       return '';
     }).join('')}
-                        </div>
-                    `).join('')}
-                </div>
-            </article>
-        `;
+                  </div>
+              `).join('')}
+          </div>
+      </article>
+    `;
 
     container.innerHTML = html;
     renderSidebar("#sidebar-content", article);
@@ -437,17 +437,17 @@ export const renderSidebar = async (selector, currentArticle) => {
 
     if (articles.length > 0) {
       relatedHtml = `
-                <div class="mt-12">
-                    <h5 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 ml-4">Recommended</h5>
-                    <div class="space-y-8">
-                        ${articles.map(article => {
+        <div class="mt-12">
+            <h5 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 ml-4">Recommended</h5>
+            <div class="space-y-8">
+        ${articles.map(article => {
         const postUrl = `/blog/post?slug=${article.slug}`;
         return `
-                                <a href="${postUrl}" class="group block px-4 transition-all hover:translate-x-1">
-                                    <h6 class="text-[13px] font-black text-slate-900 group-hover:text-pink-600 transition-colors leading-tight mb-2 line-clamp-2">${article.title}</h6>
-                                    <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${formatDate(article.createdAt)}</div>
-                                </a>
-                            `;
+          <a href="${postUrl}" class="group block px-4 transition-all hover:translate-x-1">
+              <h6 class="text-[13px] font-black text-slate-900 group-hover:text-pink-600 transition-colors leading-tight mb-2 line-clamp-2">${article.title}</h6>
+              <div class="text-[8px] font-bold text-slate-400 uppercase tracking-widest">${formatDate(article.createdAt)}</div>
+          </a>
+      `;
       }).join("")}
                     </div>
                 </div>
