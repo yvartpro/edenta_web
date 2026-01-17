@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="../">
+  <base href="/">
   <title>Services | Auguste Edenta</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link
@@ -112,11 +112,11 @@
   <footer id="footer"></footer>
 
   <script type="module">
-    import { loadComponent, initMobileMenu } from './component/script.js';
+    import { loadComponent, initMobileMenu } from '/component/script.js';
     const init = async () => {
       await Promise.all([
-        loadComponent("#header", "./header.html"),
-        loadComponent("#footer", "./footer.html"),
+        loadComponent("#header", "/component/header.html"),
+        loadComponent("#footer", "/component/footer.html"),
       ]);
       initMobileMenu();
     };

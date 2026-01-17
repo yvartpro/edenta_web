@@ -1,4 +1,4 @@
-import { formatDate, resolveFileUrl, API_BASE_URL } from "../utils.js";
+import { formatDate, resolveFileUrl, API_BASE_URL, parseContent } from "/utils.js";
 
 /**
  * Calculates estimated reading time
@@ -9,7 +9,9 @@ const getReadingTime = (content) => {
   content?.sections?.forEach(section => {
     if (section.title) text += section.title + " ";
     section.blocks?.forEach(block => {
-      if (block.type === 'text') text += block.content + " ";
+      if (block.type === 'text' || block.type === 'list') {
+        text += (block.value || "") + " ";
+      }
     });
   });
   const words = text.trim().split(/\s+/).length;
@@ -154,7 +156,7 @@ export const setSEO = (data) => {
       "name": "Auguste Edenta",
       "logo": {
         "@type": "ImageObject",
-        "url": window.location.origin + "/public/images/logo.png"
+        "url": window.location.origin + "/public/apple-touch-icon.png"
       }
     },
     "mainEntityOfPage": {
@@ -178,14 +180,17 @@ export const loadArticles = async (selector, limit = 6) => {
     if (!response.ok) throw new Error("Failed to fetch articles");
     const json = await response.json();
     const articles = json.data || json;
-    console.log(articles)
 
     if (!Array.isArray(articles) || articles.length === 0) {
       container.innerHTML = "<p class='text-slate-500'>No articles found.</p>";
       return;
     }
 
-    container.innerHTML = articles.map(article => `
+    container.innerHTML = articles.map(article => {
+      const slug = article.slug || '';
+      const postUrl = `/blog/post?slug=${slug}`;
+
+      return `
             <article class="flex flex-col border-b border-slate-100 pb-10 group hover:border-pink-200 transition-colors">
                 <div class="grid md:grid-cols-[280px_1fr] gap-8 items-start">
                     ${(article.heroImage || article.heroImageId) ? `
@@ -201,25 +206,26 @@ export const loadArticles = async (selector, limit = 6) => {
                     `}
                     <div class="flex flex-col h-full py-1">
                         <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-pink-600 mb-4">
-                            <span>${article.Category?.name || 'Perspective'}</span>
+                            <span>${article.category?.name || 'Perspective'}</span>
                             <span class="text-slate-300">|</span>
                             <span class="text-slate-400 font-bold">${formatDate(article.createdAt)}</span>
                         </div>
                         <h3 class="text-2xl font-black text-slate-900 group-hover:text-pink-600 transition-colors leading-tight mb-4 tracking-tight">
-                            <a href="blog/post.html?slug=${article.slug}">${article.title}</a>
+                            <a href="${postUrl}">${article.title}</a>
                         </h3>
                         <p class="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-6 font-medium">
                             ${article.summary || article.subtitle || ''}
                         </p>
                         <div class="mt-auto">
-                            <a href="blog/post.html?slug=${article.slug}" class="text-[10px] font-black uppercase tracking-widest text-slate-900 border-b-2 border-pink-500 pb-1 hover:text-pink-600 hover:border-pink-600 transition-all">
+                            <a href="${postUrl}" class="text-[10px] font-black uppercase tracking-widest text-slate-900 border-b-2 border-pink-500 pb-1 hover:text-pink-600 hover:border-pink-600 transition-all">
                                 Read the Article
                             </a>
                         </div>
                     </div>
                 </div>
             </article>
-        `).join("");
+        `;
+    }).join("");
   } catch (err) {
     console.error("Error loading articles:", err);
     container.innerHTML = "<p class='text-pink-500 font-bold'>Error loading articles.</p>";
@@ -233,11 +239,19 @@ export const renderArticle = async (selector, slug) => {
   const container = document.querySelector(selector);
   if (!container || !slug) return;
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/article/slug/${slug}`);
-    if (!response.ok) throw new Error("Article not found");
-    const article = await response.json();
+  console.log(`[renderArticle] Initializing for slug: "${slug}"`);
 
+  try {
+    const url = `${API_BASE_URL}/article/slug/${encodeURIComponent(slug)}`;
+    const response = await fetch(url);
+    if (!response.ok) {
+      console.error(`Article fetch failed: ${response.status} ${response.statusText} at ${url}`);
+      throw new Error("Article not found");
+    }
+    const article = await response.json();
+    article.content = parseContent(article.content);
+
+    console.log(`[renderArticle] Successfully fetched article: "${article.title}"`);
     setSEO(article);
 
     const readingTime = getReadingTime(article.content);
@@ -264,7 +278,7 @@ export const renderArticle = async (selector, slug) => {
                     
                     <div class="flex items-center gap-4 py-6 border-y border-slate-100 mb-12">
                          <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-slate-100 text-slate-600">
-                            ${article.Category?.name || 'Editorial'}
+                            ${article.category?.name || 'Editorial'}
                         </span>
                     </div>
                 </header>
@@ -284,7 +298,7 @@ export const renderArticle = async (selector, slug) => {
                             ${section.title ? `<h2 class="text-3xl font-bold text-slate-900 mt-14 mb-6 leading-tight">${section.title}</h2>` : ''}
                             ${section.blocks?.map(block => {
       if (block.type === 'text') {
-        return `<div class="mb-8 font-serif">${block.content}</div>`;
+        return `<div class="mb-8 font-serif">${block.value}</div>`;
       } else if (block.type === 'image') {
         // Find URL in contentFiles if block.fileId is present, or use block.value if it's a URL
         let imageUrl = block.value;
@@ -300,6 +314,11 @@ export const renderArticle = async (selector, slug) => {
                                             ${block.caption ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${block.caption}</figcaption>` : ''}
                                         </figure>
                                     `;
+      } else if (block.type === 'list') {
+        return `<div class="mb-6 flex gap-3 font-serif">
+                    <span class="text-pink-500 font-bold">•</span>
+                    <span>${block.value}</span>
+                </div>`;
       }
       return '';
     }).join('')}
@@ -325,7 +344,7 @@ export const renderArticle = async (selector, slug) => {
             <div class="text-center py-24">
                 <h1 class="text-4xl font-bold text-slate-900 mb-4">Post not found</h1>
                 <p class="text-slate-500 mb-8">We couldn't find the article you're looking for.</p>
-                <a href="blog/" class="text-pink-600 font-bold hover:underline">Back to Blog</a>
+                <a href="/blog/" class="text-pink-600 font-bold hover:underline">Back to Blog</a>
             </div>
         `;
   }
