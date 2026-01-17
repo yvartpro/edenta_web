@@ -96,8 +96,8 @@
       const body = formData.get("body")
       const destination = "augustecharity@gmail.com"
 
-      // send formatted message with sender name
       window.open(`mailto:${destination}?subject=${subject}&body=${body}%0D%0A%0D%0AName: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0A${body}`)
+      form.reset()
     }
     const init = async () => {
       await Promise.all([
