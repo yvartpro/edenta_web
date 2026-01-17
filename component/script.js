@@ -178,6 +178,7 @@ export const loadArticles = async (selector, limit = 6) => {
     if (!response.ok) throw new Error("Failed to fetch articles");
     const json = await response.json();
     const articles = json.data || json;
+    console.log(articles)
 
     if (!Array.isArray(articles) || articles.length === 0) {
       container.innerHTML = "<p class='text-slate-500'>No articles found.</p>";
