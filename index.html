@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href="/">
+  <meta name="description"
+    content="Centre Communautaire Iteba (CCI) Burundi - Empowering community through innovation and collaboration.">
+  <title>Auguste Charity Edenta | Home Page</title>
+  <!-- Favicons & SEO -->
+  <link rel="icon" href="/public/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="/public/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/public/icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="/public/icon-512.png">
+  <link rel="manifest" href="/public/site.webmanifest">
+  <meta name="theme-color" content="#1e40af">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Auguste Charity Edenta">
+  <meta property="og:image" content="/public/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --secondary: #059669;
+      --accent: #f59e0b;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, var(--primary) 0%, #3b82f6 100%);
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Simple Carousel Slider Styles */
+    #carousel-inner {
+      transition: transform 0.5s ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="bg-slate-50 text-slate-900 antialiased selection:bg-blue-100">
+  <header id="header" class="sticky top-0 z-50"></header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-[85vh] flex items-center overflow-hidden bg-slate-900">
+      <!-- Background Image with Overlay -->
+      <div class="absolute inset-0 z-0">
+        <img id="hero-image" alt="CCI Community" class="w-full h-full object-cover opacity-40">
+        <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/80 to-transparent"></div>
+      </div>
+
+      <div class="relative z-10 max-w-7xl mx-auto px-6 py-24 grid lg:grid-cols-2 gap-12 items-center">
+        <div class="space-y-8">
+          <span
+            class="inline-flex items-center px-4 py-1.5 rounded-full text-sm font-bold tracking-wider text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 uppercase">
+            Auguste Charity Edenta
+          </span>
+          <h1 class="text-5xl md:text-7xl font-extrabold text-white leading-[1.1]">
+            Welcome to our blog <span
+              class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">Auguste Charity
+              Edenta</span>
+          </h1>
+          <p class="text-lg text-slate-300 max-w-xl leading-relaxed">
+            I am a passionate content writer with strong background in copywriting and content creation. I am always
+            looking for new challenges and opportunities to learn and grow. I am also a big fan of open source and I
+            love to contribute to the community.
+          </p>
+          <div class="flex flex-wrap gap-4">
+            <a href="#donate"
+              class="px-8 py-4 bg-amber-500 hover:bg-amber-600 text-slate-900 font-bold rounded-xl shadow-lg transition-all hover:-translate-y-1 active:scale-95">
+              Read more
+            </a>
+            <a href="#"
+              class="px-8 py-4 bg-white/10 hover:bg-white/20 text-white font-bold rounded-xl glass-effect transition-all hover:-translate-y-1 active:scale-95">
+              Explore more
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Slider Carousel Section (6 items) -->
+    <section id="carousel-section" class="py-20 bg-white">
+      <div class="max-w-7xl mx-auto px-6 mb-12 flex justify-between items-end">
+        <div>
+          <h2 class="text-3xl font-bold text-slate-900">Latest posts</h2>
+          <p class="text-slate-500 mt-2">Latest posts from my blog.</p>
+        </div>
+        <div class="flex gap-2">
+          <button id="prev-btn" class="p-3 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button id="next-btn" class="p-3 rounded-full border border-slate-200 hover:bg-slate-50 transition-colors">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div id="carousel" class="relative overflow-hidden">
+        <!-- Content injected by route.js -->
+      </div>
+    </section>
+
+    <!-- Latest News/Posts Section (6 posts) -->
+    <section id="posts-section" class="py-24 bg-slate-50">
+      <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+          <h2 class="text-4xl font-extrabold text-slate-900">Latest posts from my blog</h2>
+          <div class="h-1.5 w-20 bg-emerald-500 mx-auto mt-4 rounded-full"></div>
+        </div>
+        <div id="posts" class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+
+          <!-- Dynamic posts loaded here -->
+        </div>
+        <div class="mt-16 text-center">
+          <a href="#"
+            class="inline-flex items-center font-bold text-blue-600 hover:text-blue-700 underline underline-offset-8 decoration-2 decoration-blue-200 hover:decoration-blue-600 transition-all">
+            View All News
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script type="module" src="./route.js"></script>
+</body>
+
+</html>
