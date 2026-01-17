@@ -1,6 +1,22 @@
 import { formatDate, resolveFileUrl, API_BASE_URL } from "../utils.js";
 
 /**
+ * Calculates estimated reading time
+ */
+const getReadingTime = (content) => {
+  const wordsPerMinute = 225;
+  let text = "";
+  content?.sections?.forEach(section => {
+    if (section.title) text += section.title + " ";
+    section.blocks?.forEach(block => {
+      if (block.type === 'text') text += block.content + " ";
+    });
+  });
+  const words = text.trim().split(/\s+/).length;
+  return Math.ceil(words / wordsPerMinute);
+};
+
+/**
  * Loads an HTML component into a container
  */
 export const loadComponent = async (selector, filePath) => {
@@ -82,15 +98,38 @@ export const setSEO = (data) => {
   if (data.title) document.title = `${data.title} | Auguste Edenta`;
 
   const description = data.summary || data.subtitle || "";
-  if (description) {
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.name = "description";
-      document.head.appendChild(metaDesc);
+
+  // Social Meta Tags
+  const updateMeta = (name, content, property = false) => {
+    let selector = property ? `meta[property="${name}"]` : `meta[name="${name}"]`;
+    let el = document.querySelector(selector);
+    if (!el) {
+      el = document.createElement('meta');
+      if (property) el.setAttribute('property', name);
+      else el.name = name;
+      document.head.appendChild(el);
     }
-    metaDesc.content = description;
+    el.content = content;
+  };
+
+  updateMeta("description", description);
+  updateMeta("og:title", data.title, true);
+  updateMeta("og:description", description, true);
+  updateMeta("og:image", resolveFileUrl(data.heroImageId), true);
+  updateMeta("og:type", "article", true);
+  updateMeta("twitter:card", "summary_large_image");
+  updateMeta("twitter:title", data.title);
+  updateMeta("twitter:description", description);
+  updateMeta("twitter:image", resolveFileUrl(data.heroImageId));
+
+  // Canonical Link
+  let canonical = document.querySelector('link[rel="canonical"]');
+  if (!canonical) {
+    canonical = document.createElement('link');
+    canonical.rel = "canonical";
+    document.head.appendChild(canonical);
   }
+  canonical.href = window.location.href;
 
   // JSON-LD for Article
   const existingScript = document.querySelector('script[type="application/ld+json"]');
@@ -102,12 +141,25 @@ export const setSEO = (data) => {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": data.title,
-    "description": data.summary,
+    "description": description,
     "image": resolveFileUrl(data.heroImageId),
     "datePublished": data.createdAt,
     "author": {
       "@type": "Person",
-      "name": "Auguste Edenta"
+      "name": "Auguste Edenta",
+      "url": window.location.origin + "/about/"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Auguste Edenta",
+      "logo": {
+        "@type": "ImageObject",
+        "url": window.location.origin + "/public/images/logo.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": window.location.href
     }
   };
   script.textContent = JSON.stringify(jsonLd);
@@ -133,28 +185,29 @@ export const loadArticles = async (selector, limit = 6) => {
     }
 
     container.innerHTML = articles.map(article => `
-            <article class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 border border-pink-50 flex flex-col h-full group">
-                <div class="relative h-64 overflow-hidden">
-                    <img src="${resolveFileUrl(article.heroImageId) || 'https://via.placeholder.com/800x600?text=No+Image'}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-                    <div class="absolute top-4 left-4">
-                        <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-white/90 backdrop-blur text-pink-600 shadow-sm">
-                            ${article.Category?.name || 'Uncategorized'}
-                        </span>
+            <article class="flex flex-col border-b border-slate-100 pb-10 group hover:border-pink-200 transition-colors">
+                <div class="grid md:grid-cols-[280px_1fr] gap-8 items-start">
+                    <div class="relative aspect-[16/10] overflow-hidden rounded-xl bg-slate-100">
+                        <img src="${resolveFileUrl(article.heroImageId) || 'https://via.placeholder.com/800x600?text=No+Image'}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                     </div>
-                </div>
-                <div class="p-8 flex-grow">
-                    <div class="text-xs font-bold text-slate-400 mb-4 uppercase tracking-widest">
-                        ${formatDate(article.createdAt)} | ${article.view_count} views
+                    <div class="flex flex-col h-full py-1">
+                        <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-pink-600 mb-4">
+                            <span>${article.Category?.name || 'Perspective'}</span>
+                            <span class="text-slate-300">|</span>
+                            <span class="text-slate-400 font-bold">${formatDate(article.createdAt)}</span>
+                        </div>
+                        <h3 class="text-2xl font-black text-slate-900 group-hover:text-pink-600 transition-colors leading-tight mb-4 tracking-tight">
+                            <a href="blog/post.html?slug=${article.slug}">${article.title}</a>
+                        </h3>
+                        <p class="text-slate-500 text-sm leading-relaxed line-clamp-2 mb-6 font-medium">
+                            ${article.summary || article.subtitle || ''}
+                        </p>
+                        <div class="mt-auto">
+                            <a href="blog/post.html?slug=${article.slug}" class="text-[10px] font-black uppercase tracking-widest text-slate-900 border-b-2 border-pink-500 pb-1 hover:text-pink-600 hover:border-pink-600 transition-all">
+                                Read the Article
+                            </a>
+                        </div>
                     </div>
-                    <h3 class="text-2xl font-bold text-slate-900 group-hover:text-pink-600 transition-colors leading-tight mb-4">
-                        ${article.title}
-                    </h3>
-                    <p class="text-slate-500 text-sm line-clamp-3">${article.summary || ''}</p>
-                </div>
-                <div class="px-8 pb-8 pt-4">
-                    <a href="blog/post.html?slug=${article.slug}" class="inline-flex items-center text-xs font-black uppercase tracking-widest text-pink-600 hover:text-pink-700 transition-colors">
-                        Read More →
-                    </a>
                 </div>
             </article>
         `).join("");
@@ -178,61 +231,75 @@ export const renderArticle = async (selector, slug) => {
 
     setSEO(article);
 
+    const readingTime = getReadingTime(article.content);
+
     let html = `
-            <header class="mb-12">
-                <div class="flex items-center gap-4 mb-6">
-                    <span class="px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest bg-pink-100 text-pink-600">
-                        ${article.Category?.name || 'Blog'}
-                    </span>
-                    <span class="text-slate-400 text-sm font-bold">${formatDate(article.createdAt)}</span>
-                </div>
-                <h1 class="text-4xl md:text-6xl font-black text-slate-900 leading-tight mb-6">
-                    ${article.title}
-                </h1>
-                ${article.subtitle ? `<p class="text-xl text-slate-500 font-medium italic">${article.subtitle}</p>` : ''}
-            </header>
+            <article class="article-content">
+                <header class="mb-14">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 font-bold border border-pink-200">
+                            A
+                        </div>
+                        <div class="text-sm">
+                            <div class="font-bold text-slate-900">Auguste Edenta</div>
+                            <div class="text-slate-500 font-medium">
+                                ${formatDate(article.createdAt)} · ${readingTime} min read
+                            </div>
+                        </div>
+                    </div>
 
-            ${article.heroImageId ? `
-                <div class="rounded-3xl overflow-hidden shadow-2xl mb-12">
-                    <img src="${resolveFileUrl(article.heroImageId)}" alt="${article.title}" class="w-full h-auto">
-                </div>
-            ` : ''}
+                    <h1 class="text-4xl md:text-5xl font-black text-slate-900 leading-[1.2] mb-6 tracking-tight">
+                        ${article.title}
+                    </h1>
+                    ${article.subtitle ? `<p class="text-2xl text-slate-500 font-medium leading-[1.3] mb-8">${article.subtitle}</p>` : ''}
+                    
+                    <div class="flex items-center gap-4 py-6 border-y border-slate-100 mb-12">
+                         <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-slate-100 text-slate-600">
+                            ${article.Category?.name || 'Editorial'}
+                        </span>
+                    </div>
+                </header>
 
-            <div class="prose prose-pink prose-xl max-w-none text-slate-700 leading-relaxed">
-                ${article.content?.sections?.map(section => `
-                    <section class="mb-12">
-                        ${section.title ? `<h2 class="text-3xl font-bold text-slate-900 mt-12 mb-6">${section.title}</h2>` : ''}
-                        ${section.blocks?.map(block => {
+                ${article.heroImageId ? `
+                    <figure class="mb-14 -mx-6 md:-mx-24 lg:-mx-32">
+                        <img src="${resolveFileUrl(article.heroImageId)}" alt="${article.title}" class="w-full h-auto shadow-sm">
+                        ${article.title ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${article.title}</figcaption>` : ''}
+                    </figure>
+                ` : ''}
+
+                <div class="prose prose-pink max-w-none text-[1.2rem] md:text-[1.3rem] leading-[1.6] text-[#292929]">
+                    ${article.content?.sections?.map(section => `
+                        <div class="mb-12">
+                            ${section.title ? `<h2 class="text-3xl font-bold text-slate-900 mt-14 mb-6 leading-tight">${section.title}</h2>` : ''}
+                            ${section.blocks?.map(block => {
       if (block.type === 'text') {
-        return `<div class="mb-6">${block.content}</div>`;
+        return `<div class="mb-8 font-serif">${block.content}</div>`;
       } else if (block.type === 'image') {
         return `
-                                    <figure class="my-10 group">
-                                        <div class="rounded-2xl overflow-hidden bg-slate-100">
+                                        <figure class="my-14 -mx-6 md:-mx-12 group">
                                             <img src="${resolveFileUrl(block.fileId)}" alt="${block.caption || ''}" class="w-full h-auto">
-                                        </div>
-                                        ${block.caption ? `<figcaption class="mt-4 text-center text-sm text-slate-500 italic">${block.caption}</figcaption>` : ''}
-                                    </figure>
-                                `;
-      } else if (block.type === 'gallery') {
-        return `
-                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4 my-10">
-                                        ${block.images?.map(imgId => `
-                                            <div class="aspect-square rounded-xl overflow-hidden bg-slate-100 group">
-                                                <img src="${resolveFileUrl(imgId)}" alt="Gallery image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                                            </div>
-                                        `).join('')}
-                                    </div>
-                                `;
+                                            ${block.caption ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${block.caption}</figcaption>` : ''}
+                                        </figure>
+                                    `;
       }
       return '';
     }).join('')}
-                    </section>
-                `).join('')}
-            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </article>
         `;
 
     container.innerHTML = html;
+
+    // Initialize Reading Progress
+    window.addEventListener('scroll', () => {
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = (winScroll / height) * 100;
+      const pb = document.getElementById("progress-bar");
+      if (pb) pb.style.width = scrolled + "%";
+    });
   } catch (err) {
     console.error("Error rendering article:", err);
     container.innerHTML = `

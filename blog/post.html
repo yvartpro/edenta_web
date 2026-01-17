@@ -41,48 +41,38 @@
   </style>
 </head>
 
-<body class="bg-slate-50 text-slate-900 antialiased">
-  <header id="header" class="sticky top-0 z-50"></header>
+<div id="progress-bar"></div>
+<header id="header" class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100"></header>
 
-  <main class="py-24">
-    <div class="max-w-4xl mx-auto px-6" id="article-content">
-      <!-- Article content loaded here -->
-      <div class="animate-pulse space-y-8">
-        <div class="h-10 bg-slate-200 rounded w-3/4 mx-auto"></div>
-        <div class="h-6 bg-slate-200 rounded w-1/2 mx-auto"></div>
-        <div class="h-96 bg-slate-200 rounded-3xl"></div>
-        <div class="space-y-4">
-          <div class="h-4 bg-slate-200 rounded w-full"></div>
-          <div class="h-4 bg-slate-200 rounded w-full"></div>
-          <div class="h-4 bg-slate-200 rounded w-5/6"></div>
-        </div>
-      </div>
-    </div>
-  </main>
+<main class="py-20">
+  <div class="max-w-[680px] mx-auto px-6" id="article-content">
+    <!-- Article content loaded here -->
+  </div>
+</main>
 
-  <footer id="footer"></footer>
+<footer id="footer"></footer>
 
-  <script type="module">
-    import { loadComponent, initMobileMenu, renderArticle } from './component/script.js';
-    const init = async () => {
-      await Promise.all([
-        loadComponent("#header", "./header.html"),
-        loadComponent("#footer", "./footer.html"),
-      ]);
+<script type="module">
+  import { loadComponent, initMobileMenu, renderArticle } from './component/script.js';
+  const init = async () => {
+    await Promise.all([
+      loadComponent("#header", "./header.html"),
+      loadComponent("#footer", "./footer.html"),
+    ]);
 
-      const urlParams = new URLSearchParams(window.location.search);
-      const slug = urlParams.get('slug');
+    const urlParams = new URLSearchParams(window.location.search);
+    const slug = urlParams.get('slug');
 
-      if (slug) {
-        await renderArticle("#article-content", slug);
-      } else {
-        window.location.href = 'blog/';
-      }
+    if (slug) {
+      await renderArticle("#article-content", slug);
+    } else {
+      window.location.href = 'blog/';
+    }
 
-      initMobileMenu();
-    };
-    init();
-  </script>
+    initMobileMenu();
+  };
+  init();
+</script>
 </body>
 
 </html>
