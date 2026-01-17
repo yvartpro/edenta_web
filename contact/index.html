@@ -107,7 +107,7 @@
       const body = formData.get("body")
       const destination = "augustecharity@gmail.com"
 
-      window.open(`mailto:${destination}?subject=${subject}&body=${body}%0D%0A%0D%0AName: ${name}%0D%0AEmail: ${email}%0D%0A%0D%0A${body}`)
+      window.open(`mailto:${destination}?subject=${subject}&body=${body}%0D%0A%0D%0AName: ${name}`)
       form.reset()
     }
     const init = async () => {
