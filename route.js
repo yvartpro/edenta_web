@@ -16,7 +16,11 @@ const init = async () => {
         if (articles && articles.length > 0) {
             const heroImage = document.getElementById("hero-image");
             if (heroImage && articles[0].heroImageId) {
-                heroImage.src = resolveFileUrl(articles[0].heroImageId);
+                heroImage.src = resolveFileUrl(articles[0].heroImage || articles[0].heroImageId);
+                heroImage.classList.remove('opacity-0');
+            } else if (heroImage) {
+                // If no image, show a default or keep the styled container background
+                heroImage.classList.add('opacity-0');
             }
         }
     } catch (e) {

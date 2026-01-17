@@ -188,9 +188,17 @@ export const loadArticles = async (selector, limit = 6) => {
     container.innerHTML = articles.map(article => `
             <article class="flex flex-col border-b border-slate-100 pb-10 group hover:border-pink-200 transition-colors">
                 <div class="grid md:grid-cols-[280px_1fr] gap-8 items-start">
-                    <div class="relative aspect-[16/10] overflow-hidden rounded-xl bg-slate-100">
-                        <img src="${resolveFileUrl(article.heroImage || article.heroImageId) || 'https://via.placeholder.com/800x600?text=No+Image'}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
-                    </div>
+                    ${(article.heroImage || article.heroImageId) ? `
+                        <div class="relative aspect-[16/10] overflow-hidden rounded-xl bg-slate-100">
+                            <img src="${resolveFileUrl(article.heroImage || article.heroImageId)}" alt="${article.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                        </div>
+                    ` : `
+                        <div class="relative aspect-[16/10] overflow-hidden rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center">
+                            <svg class="w-12 h-12 text-pink-200" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zm-5.04-6.71l-2.75 3.54-1.96-2.36L6.5 17h11l-3.54-4.71z"/>
+                            </svg>
+                        </div>
+                    `}
                     <div class="flex flex-col h-full py-1">
                         <div class="flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-pink-600 mb-4">
                             <span>${article.Category?.name || 'Perspective'}</span>
@@ -266,7 +274,9 @@ export const renderArticle = async (selector, slug) => {
                         <img src="${resolveFileUrl(article.heroImage || article.heroImageId)}" alt="${article.title}" class="w-full h-auto shadow-sm">
                         ${article.title ? `<figcaption class="mt-4 text-center text-sm text-slate-400 italic font-sans">${article.title}</figcaption>` : ''}
                     </figure>
-                ` : ''}
+                ` : `
+                    <div class="mb-14 h-1 w-20 bg-pink-100 rounded-full"></div>
+                `}
 
                 <div class="prose prose-pink max-w-none text-[1.2rem] md:text-[1.3rem] leading-[1.6] text-[#292929]">
                     ${article.content?.sections?.map(section => `
