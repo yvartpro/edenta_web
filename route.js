@@ -11,11 +11,12 @@ const init = async () => {
     // Fetch hero image dynamic from API if needed, or use a default
     try {
         const resp = await fetch(`${API_BASE_URL}/article?status=published&limit=1`);
-        const data = await resp.json();
-        if (data && data.length > 0) {
+        const json = await resp.json();
+        const articles = json.data || json;
+        if (articles && articles.length > 0) {
             const heroImage = document.getElementById("hero-image");
-            if (heroImage && data[0].heroImageId) {
-                heroImage.src = resolveFileUrl(data[0].heroImageId);
+            if (heroImage && articles[0].heroImageId) {
+                heroImage.src = resolveFileUrl(articles[0].heroImageId);
             }
         }
     } catch (e) {
