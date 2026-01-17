@@ -376,7 +376,7 @@ export const renderArticle = async (selector, slug) => {
             <div class="text-center py-24">
                 <h1 class="text-4xl font-bold text-slate-900 mb-4">Post not found</h1>
                 <p class="text-slate-500 mb-8">We couldn't find the article you're looking for.</p>
-                <a href="/blog/" class="text-pink-600 font-bold hover:underline">Back to Blog</a>
+                <a href="/edenta_web/blog/" class="text-pink-600 font-bold hover:underline">Back to Blog</a>
             </div>
         `;
   }
@@ -401,7 +401,7 @@ export const renderSidebar = async (selector, currentArticle) => {
                 Helping individuals and businesses save time, stay organised, and achieve more through expert administrative support and content strategy.
             </p>
             <div class="flex gap-4">
-                <a href="/contact/" class="text-[9px] font-black uppercase tracking-widest text-slate-900 border-b-2 border-pink-100 hover:border-pink-600 transition-all">Let's Talk</a>
+                <a href="/edenta_web/contact/" class="text-[9px] font-black uppercase tracking-widest text-slate-900 border-b-2 border-pink-100 hover:border-pink-600 transition-all">Let's Talk</a>
             </div>
         </div>
     `;
@@ -441,7 +441,7 @@ export const renderSidebar = async (selector, currentArticle) => {
             <h5 class="text-[9px] font-black uppercase tracking-[0.3em] text-slate-400 mb-8 ml-4">Recommended</h5>
             <div class="space-y-8">
         ${articles.map(article => {
-        const postUrl = `/blog/post?slug=${article.slug}`;
+        const postUrl = `/edenta_web/blog/post?slug=${article.slug}`;
         return `
           <a href="${postUrl}" class="group block px-4 transition-all hover:translate-x-1">
               <h6 class="text-[13px] font-black text-slate-900 group-hover:text-pink-600 transition-colors leading-tight mb-2 line-clamp-2">${article.title}</h6>
