@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://localhost:4000/edenta/api';
+export const API_BASE_URL = 'https://capbio.bi/edenta/api';
 export const formatDate = (dateStr) => {
   const date = new Date(dateStr);
   const options = { year: 'numeric', month: 'long', day: 'numeric' };

@@ -239,8 +239,6 @@ export const renderArticle = async (selector, slug) => {
   const container = document.querySelector(selector);
   if (!container || !slug) return;
 
-  console.log(`[renderArticle] Initializing for slug: "${slug}"`);
-
   try {
     const url = `${API_BASE_URL}/article/slug/${encodeURIComponent(slug)}`;
     const response = await fetch(url);
@@ -251,8 +249,9 @@ export const renderArticle = async (selector, slug) => {
     const article = await response.json();
     article.content = parseContent(article.content);
 
-    console.log(`[renderArticle] Successfully fetched article: "${article.title}"`);
     setSEO(article);
+
+    console.log(article);
 
     const readingTime = getReadingTime(article.content);
 
@@ -316,6 +315,41 @@ export const renderArticle = async (selector, slug) => {
                                     `;
       } else if (block.type === 'list') {
         return `<div>${block.value}</div>`;
+      } else if (block.type === 'gallery') {
+        const layout = block.layout || 'grid';
+        const images = block.images || [];
+
+        const galleryImagesHtml = images.map(imgData => {
+          let imgUrl = "";
+          if (imgData.fileId && article.contentFiles) {
+            const file = article.contentFiles.find(f => f.id == imgData.fileId);
+            if (file) imgUrl = file.url;
+          }
+          if (!imgUrl && imgData.fileId) imgUrl = resolveFileUrl(imgData.fileId);
+
+          if (!imgUrl) return "";
+
+          return `
+            <div class="break-inside-avoid mb-4">
+              <img src="${imgUrl}" class="w-full h-auto rounded-xl shadow-sm hover:shadow-md transition-shadow">
+            </div>
+          `;
+        }).join('');
+
+        if (layout === 'masonry') {
+          return `
+            <div class="my-10 columns-2 md:columns-3 gap-4">
+              ${galleryImagesHtml}
+            </div>
+          `;
+        } else {
+          // Default Grid
+          return `
+            <div class="my-10 grid grid-cols-2 md:grid-cols-3 gap-4">
+              ${galleryImagesHtml}
+            </div>
+          `;
+        }
       }
       return '';
     }).join('')}
